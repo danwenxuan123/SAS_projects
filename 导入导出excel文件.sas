@@ -1,0 +1,16 @@
+libname dantest "C:\Users\Dan Wenxuan\Desktop\工作资料";
+proc import datafile ='C:\Users\Dan Wenxuan\Desktop\工作资料\hj_overdue(1).xlsx' out=tmp2 dbms=xlsx replace;
+sheet="TEMP_TEST1";
+run;
+proc import datafile ='C:\Users\Dan Wenxuan\Desktop\工作资料\互金阈值测试数据.xlsx' out=tmp1 dbms=xlsx replace;
+sheet="互金阈值测试数据";
+run;
+PROC SORT DATA=TMP1; BY SERIALNO; RUN;
+PROC SORT DATA=TMP2; BY SERIALNO; RUN;
+data dantest.final3;
+	MERGE tmp1(in=A) tmp2;
+	BY SERIALNO;
+	IF A;
+RUN;
+PROC EXPORT DATA=DANTEST.FINAL3 OUTFILE='C:\Users\Dan Wenxuan\Desktop\工作资料\互金阈值测试数据及逾期数据.xlsx' dbms=xlsx replace;
+run;
